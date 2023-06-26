@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8" />
+    <link href="styles.css" rel="stylesheet">
+    <title>Quiz.js</title>
+    
+  </head>
+
+  <body>
+    <header>
+      <h1>Quiz.js</h1>
+      <p>Do you know JS? Let's Find out!</p>
+    </header>
+
+    <main>
+      <p id="score">
+        Score: <span id="current"></span> / <span id="completed"></span>
+      </p>
+      <div id="statement"></div>
+
+      <div id="options">
+        <button name="true" value="true">true</button>
+        <button name="false" value="false">false</button>
+      </div>
+
+      <div id="explanation"></div>
+      <button id="next" class="hide">Next Question</button>
+      <p class="end" id="end">Quiz has been completed!</p>
+    </main>
+
+    <!-- JS begins here! -->
+
+    <script type="text/javascript">
+      let statement = document.getElementById("statement");
+      let optionButtons = document.getElementById("options").children;
+      let explanation = document.getElementById("explanation");
+      let nextQue = document.getElementById("next");
+      let current = 0;
+      let completed = 0;
+
+      let facts = {
+        que1: {
+          statement: "Array is a type of built-in object in JS.",
+          answer: true,
+          explanation:
+            "JS has only 2 types of data, primitive or objects. Array falls under the object category and it has added properties.",
+        },
+        que2: {
+          statement:
+            "An empty string is a falsy while an empty array is a truthy.",
+          answer: true,
+          explanation:
+            "Empty arrays can be populated, but empty strings cannot be modified.",
+        },
+        que3: {
+          statement: "'1' + '5' === '6' ",
+          answer: false,
+          explanation:
+            "'+' operator in strings performs concatenation, so '1' + '5' is '15', which is not equal to '6'.",
+        },
+      };
+
+      const disable = (btn) => btn.setAttribute("disabled", "");
+
+      const enable = (btn) => btn.removeAttribute("disabled");
+
+      //   const showNextQuestion = (btn) => btn.classList.add("show");
+
+      let fact;
+      arrayOfSubObjects = Object.keys(facts);
+      let n = 0;
+
+      goToNextQue = () => {
+        explanation.classList.add("hide");
+        nextQue.classList.add("hide");
+
+        currentSubObject = arrayOfSubObjects[n];
+        fact = facts[currentSubObject];
+        n++;
+        statement.textContent = fact.statement;
+
+        for (let btn of optionButtons) {
+          btn.classList.remove("correct");
+          btn.classList.remove("incorrect");
+          enable(btn);
+        }
+      };
+
+      for (let i of optionButtons) {
+        i.addEventListener("click", () => {
+          explanation.textContent = fact.explanation;
+          explanation.classList.remove("hide");
+
+          nextQue.classList.remove("hide");
+          if (completed === arrayOfSubObjects.length - 1) {
+            // document.getElementById("end").classList.remove("end");
+            disable(nextQue);
+            nextQue.textContent =
+              "Quiz is over! Don't forget to check your final score!";
+          }
+
+          for (let j of optionButtons) {
+            disable(j);
+          }
+
+          if (i.value === fact.answer.toString()) {
+            i.classList.add("correct");
+            current++;
+          } else {
+            i.classList.add("incorrect");
+          }
+
+          completed++;
+          document.getElementById("current").textContent = current;
+          document.getElementById("completed").textContent = completed;
+        });
+      }
+      nextQue.addEventListener("click", goToNextQue);
+
+      goToNextQue();
+    </script>
+  </body>
+</html>
